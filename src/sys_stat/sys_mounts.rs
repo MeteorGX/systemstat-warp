@@ -1,9 +1,9 @@
 use serde::{Deserialize, Serialize};
 use systemstat::{Platform, saturating_sub_bytes};
-use systemstat::platform::PlatformImpl;
+use systemstat::System;
 use crate::{SysInfo, SysReply};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysMount {
     pub files: usize,
     pub files_total: usize,
@@ -22,15 +22,19 @@ pub struct SysMount {
     pub fs_mounted_on: String,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct SysMounts {
+    pub mounts: Vec<SysMount>,
+}
 
-impl SysInfo<PlatformImpl, Vec<SysMount>> for SysMount {
-    fn sys(handler: &PlatformImpl) -> std::io::Result<Vec<SysMount>> {
+impl SysInfo<System, SysMounts> for SysMounts {
+    fn sys(handler: &System) -> std::io::Result<SysMounts> {
         let mounts = handler.mounts()?;
         let mut data = Vec::with_capacity(mounts.len());
         for i in 0..mounts.len() {
             let filesystem = &mounts[i];
             let used = saturating_sub_bytes(filesystem.total, filesystem.free);
-            data.push(Self {
+            data.push(SysMount {
                 files: filesystem.files,
                 files_total: filesystem.files_total,
                 files_avail: filesystem.files_avail,
@@ -48,12 +52,11 @@ impl SysInfo<PlatformImpl, Vec<SysMount>> for SysMount {
                 fs_mounted_on: filesystem.fs_mounted_on.clone(),
             })
         }
-        Ok(data)
+        Ok(Self {
+            mounts: data,
+        })
     }
 }
 
-
-impl SysReply<SysMount> for SysMount {}
-
-impl SysReply<Vec<SysMount>> for SysMount {}
+impl SysReply for SysMounts {}
 

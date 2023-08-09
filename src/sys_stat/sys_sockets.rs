@@ -1,9 +1,8 @@
 use serde::{Deserialize, Serialize};
-use systemstat::Platform;
-use systemstat::platform::PlatformImpl;
+use systemstat::{Platform, System};
 use crate::{SysInfo, SysReply};
 
-#[derive(Serialize,Deserialize,Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysSockets {
     pub tcp_sockets_in_use: usize,
     pub tcp_sockets_orphaned: usize,
@@ -12,10 +11,10 @@ pub struct SysSockets {
     pub udp6_sockets_in_use: usize,
 }
 
-impl SysInfo<PlatformImpl,SysSockets> for SysSockets {
-    fn sys(handler: &PlatformImpl) -> std::io::Result<SysSockets> {
+impl SysInfo<System, SysSockets> for SysSockets {
+    fn sys(handler: &System) -> std::io::Result<SysSockets> {
         let stat = handler.socket_stats()?;
-        Ok(Self{
+        Ok(Self {
             tcp_sockets_in_use: stat.tcp_sockets_in_use,
             tcp_sockets_orphaned: stat.tcp_sockets_orphaned,
             udp_sockets_in_use: stat.udp_sockets_in_use,
@@ -26,6 +25,6 @@ impl SysInfo<PlatformImpl,SysSockets> for SysSockets {
 }
 
 
-impl SysReply<SysSockets> for SysSockets {}
+impl SysReply for SysSockets {}
 
 

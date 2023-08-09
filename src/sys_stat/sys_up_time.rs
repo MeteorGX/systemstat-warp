@@ -1,24 +1,28 @@
-use std::time::Duration;
 use serde::{Deserialize, Serialize};
-use systemstat::Platform;
-use systemstat::platform::PlatformImpl;
+use systemstat::{Platform, System};
 use crate::{SysInfo, SysReply};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysUpTime {
-    duration: Duration,
+    secs: u64,
+    nanos: u128,
+    micros: u128,
+    millis: u128,
 }
 
 
-impl SysInfo<PlatformImpl, SysUpTime> for SysUpTime {
-    fn sys(handler: &PlatformImpl) -> std::io::Result<SysUpTime> {
+impl SysInfo<System, SysUpTime> for SysUpTime {
+    fn sys(handler: &System) -> std::io::Result<SysUpTime> {
         let stat = handler.uptime()?;
         Ok(Self {
-            duration: stat
+            secs: stat.as_secs(),
+            nanos: stat.as_nanos(),
+            micros: stat.as_micros(),
+            millis: stat.as_millis(),
         })
     }
 }
 
 
-impl SysReply<SysUpTime> for SysUpTime {}
+impl SysReply for SysUpTime {}
 

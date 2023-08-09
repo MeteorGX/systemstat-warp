@@ -1,23 +1,28 @@
 use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
 use systemstat::{IpAddr, Platform};
-use systemstat::platform::PlatformImpl;
+use systemstat::System;
 use crate::{SysInfo, SysNetworkAddressEnum, SysReply};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 pub struct SysNetworkAddress {
     pub addr: SysNetworkAddressEnum,
     pub netmask: SysNetworkAddressEnum,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize)]
 pub struct SysNetworks {
     pub name: String,
     pub addrs: Vec<SysNetworkAddress>,
 }
 
-impl SysInfo<PlatformImpl, BTreeMap<String, SysNetworks>> for SysNetworks {
-    fn sys(handler: &PlatformImpl) -> std::io::Result<BTreeMap<String, SysNetworks>> {
+#[derive(Serialize, Deserialize)]
+pub struct SysNetworkMap {
+    pub networks: BTreeMap<String, SysNetworks>,
+}
+
+impl SysInfo<System, SysNetworkMap> for SysNetworkMap {
+    fn sys(handler: &System) -> std::io::Result<SysNetworkMap> {
         let stat = handler.networks()?;
         let mut data = BTreeMap::new();
         for (k, v) in &stat {
@@ -40,17 +45,16 @@ impl SysInfo<PlatformImpl, BTreeMap<String, SysNetworks>> for SysNetworks {
                 })
             }
 
-            data.insert(k.clone(), Self {
+            data.insert(k.clone(), SysNetworks {
                 name: v.name.clone(),
                 addrs,
             });
         }
-        Ok(data)
+        Ok(Self {
+            networks: data
+        })
     }
 }
 
 
-impl SysReply<SysNetworks> for SysNetworks {}
-
-
-impl SysReply<BTreeMap<String, SysNetworks>> for SysNetworks {}
+impl SysReply for SysNetworkMap {}

@@ -1,7 +1,9 @@
 [basic]
 log = "debug"
+log_file = ""
 
 [web]
 address = "127.0.0.1"
 port = 18081
-
+cors_origin = "*"
+static_dir = "./template/"

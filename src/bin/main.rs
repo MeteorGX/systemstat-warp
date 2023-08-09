@@ -2,8 +2,7 @@ use std::net::SocketAddr;
 use log::info;
 use simple_logger::SimpleLogger;
 use tokio::io::AsyncReadExt;
-use systemstat_warp::{AppConfig, SysRouteTable};
-
+use systemstat_warp::{AppConfig, WebRouteTable};
 
 
 #[tokio::main]
@@ -56,19 +55,19 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     }).init()?;
 
 
-
     // network
     if let Some(web) = config.web {
         info!("[Web] = {:?}",web);
 
-        // address
-        let address = format!("{}:{}",web.address,web.port);
+        // server monitor
+        let address = format!("{}:{}", web.address, web.port);
         let socket = address.parse::<SocketAddr>()?;
-
-        // server
-        warp::serve(SysRouteTable::build_sys())
-            .run(socket)
-            .await;
+        let web_clone = web.clone();
+        tokio::spawn(async move {
+            WebRouteTable::create(web_clone)
+                .build(socket)
+                .await;
+        }).await?;
     }
 
 

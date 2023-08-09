@@ -1,9 +1,8 @@
 use serde::{Deserialize, Serialize};
-use systemstat::{Platform, saturating_sub_bytes};
-use systemstat::platform::PlatformImpl;
+use systemstat::{Platform, saturating_sub_bytes, System};
 use crate::{SysInfo, SysReply};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysSwap {
     pub total: u64,
     pub total_str: String,
@@ -14,8 +13,8 @@ pub struct SysSwap {
 }
 
 
-impl SysInfo<PlatformImpl, SysSwap> for SysSwap {
-    fn sys(handler: &PlatformImpl) -> std::io::Result<SysSwap> {
+impl SysInfo<System, SysSwap> for SysSwap {
+    fn sys(handler: &System) -> std::io::Result<SysSwap> {
         let stat = handler.swap()?;
         let used = saturating_sub_bytes(stat.total, stat.free);
         Ok(Self {
@@ -30,5 +29,4 @@ impl SysInfo<PlatformImpl, SysSwap> for SysSwap {
 }
 
 
-
-impl SysReply<SysSwap> for SysSwap {}
+impl SysReply for SysSwap {}

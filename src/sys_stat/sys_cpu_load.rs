@@ -1,10 +1,10 @@
 use std::time::Duration;
 use serde::{Deserialize, Serialize};
 use systemstat::Platform;
-use systemstat::platform::PlatformImpl;
+use systemstat::System;
 use crate::{SysInfo, SysReply};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysCpuLoad {
     pub user: f32,
     pub user_str: String,
@@ -20,7 +20,7 @@ pub struct SysCpuLoad {
 
 
 impl SysCpuLoad {
-    pub async fn async_sys(handler: &PlatformImpl) -> std::io::Result<Self> {
+    pub async fn async_sys(handler: &System) -> std::io::Result<Self> {
         let cpu = handler.cpu_load_aggregate()?;
         tokio::time::sleep(Duration::from_secs(1)).await;
         let cpu = cpu.done()?;
@@ -40,8 +40,8 @@ impl SysCpuLoad {
 }
 
 
-impl SysInfo<PlatformImpl, SysCpuLoad> for SysCpuLoad {
-    fn sys(handler: &PlatformImpl) -> std::io::Result<SysCpuLoad> {
+impl SysInfo<System, SysCpuLoad> for SysCpuLoad {
+    fn sys(handler: &System) -> std::io::Result<SysCpuLoad> {
         let cpu = handler.cpu_load_aggregate()?;
         std::thread::sleep(Duration::from_secs(1));
         let cpu = cpu.done()?;
@@ -61,6 +61,6 @@ impl SysInfo<PlatformImpl, SysCpuLoad> for SysCpuLoad {
 }
 
 
-impl SysReply<SysCpuLoad> for SysCpuLoad {}
+impl SysReply for SysCpuLoad {}
 
 

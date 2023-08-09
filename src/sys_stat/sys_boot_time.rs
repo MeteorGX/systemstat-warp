@@ -1,10 +1,10 @@
 use serde::{Deserialize, Serialize};
 use systemstat::Platform;
-use systemstat::platform::PlatformImpl;
+use systemstat::System;
 use crate::sys_stat::SysInfo;
 use crate::SysReply;
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysBootTime {
     pub year: i32,
     pub month: u8,
@@ -17,8 +17,8 @@ pub struct SysBootTime {
 }
 
 
-impl SysInfo<PlatformImpl, SysBootTime> for SysBootTime {
-    fn sys(handler: &PlatformImpl) -> std::io::Result<SysBootTime> {
+impl SysInfo<System, SysBootTime> for SysBootTime {
+    fn sys(handler: &System) -> std::io::Result<SysBootTime> {
         let boot_time = handler.boot_time()?;
         Ok(SysBootTime {
             year: boot_time.year(),
@@ -34,6 +34,6 @@ impl SysInfo<PlatformImpl, SysBootTime> for SysBootTime {
 }
 
 
-impl SysReply<SysBootTime> for SysBootTime {}
+impl SysReply for SysBootTime {}
 
 

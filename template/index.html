@@ -8,8 +8,14 @@
 
     <link rel="stylesheet" href="static/css/bootstrap-icons.css">
     <link href="static/css/bootstrap.min.css" rel="stylesheet">
+    <title>Monitor</title>
 
-    <title>statistics</title>
+    <style>
+        .card-box {
+            min-height: 360px
+        }
+    </style>
+
 </head>
 <body>
 
@@ -19,15 +25,15 @@
             <div class="row">
                 <div class="col-sm-8 col-md-7 py-4">
                     <h4 class="text-white">About</h4>
-                    <p class="text-muted">Add some information about the album below, the author, or any other
-                        background context. Make it a few sentences long so folks can pick up some informative tidbits.
-                        Then, link them off to some social networking sites or contact information.</p>
+                    <p class="text-muted">A Web API for simple server monitoring, wrapped in Rust.
+                        The Web API provides functions to monitor servers. It is built using the Rust programming
+                        language. Rust allows creating fast and safe system-level code.</p>
                 </div>
                 <div class="col-sm-4 offset-md-1 py-4">
                     <h4 class="text-white">Contact</h4>
                     <ul class="list-unstyled">
-                        <li><a href="#" class="text-white">Follow on Twitter</a></li>
-                        <li><a href="#" class="text-white">Like on Facebook</a></li>
+                        <li><a href="https://github.com/meteorcat/systemstat-warp" class="text-white">Follow on
+                            Github</a></li>
                         <li><a href="mailto:guixin2010@live.cn" class="text-white">Email me</a></li>
                     </ul>
                 </div>
@@ -36,8 +42,8 @@
     </div>
     <div class="navbar navbar-dark bg-dark shadow-sm">
         <div class="container">
-            <a href="#" class="navbar-brand d-flex align-items-center">
-                <strong>服务器负载</strong>
+            <a href="/" class="navbar-brand d-flex align-items-center">
+                <strong>Server Monitor</strong>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarHeader"
                     aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,68 +59,35 @@
         <div class="container">
 
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 g-3">
-                <div class="col" style="min-height: 360px">
+                <div class="col card-box">
                     <div class="card shadow-sm w-100 h-100">
-                        <div id="memory" class="w-100 h-100 p-3"></div>
                         <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">柱状图</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">折线图</button>
-                                    <button type="button" class="btn btn-sm btn-secondary">饼图</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">散点图</button>
-                                </div>
-                            </div>
+                            <div id="memory" class="w-100 h-100 p-3"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="col" style="min-height: 360px">
+                <div class="col card-box">
                     <div class="card shadow-sm w-100 h-100">
-                        <div id="cpu" class="w-100 h-100 p-3"></div>
-
                         <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">柱状图</button>
-                                    <button type="button" class="btn btn-sm btn-secondary">折线图</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">饼图</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">散点图</button>
-                                </div>
-                            </div>
+                            <div id="cpu" class="w-100 h-100 p-3"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col card-box">
+                    <div class="card shadow-sm w-100 h-100">
+                        <div class="card-body">
+                            <div id="swap" class="w-100 h-100 p-3"></div>
                         </div>
                     </div>
                 </div>
 
 
-                <div class="col" style="min-height: 360px">
+                <div class="col card-box">
                     <div class="card shadow-sm w-100 h-100">
-                        <div id="filesystem" class="w-100 h-100 p-3"></div>
                         <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-secondary">柱状图</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">折线图</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">饼图</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">散点图</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col" style="min-height: 360px">
-                    <div class="card shadow-sm w-100 h-100">
-                        <div id="sockets" class="w-100 h-100 p-3"></div>
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">柱状图</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">折线图</button>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary">饼图</button>
-                                    <button type="button" class="btn btn-sm btn-secondary">散点图</button>
-                                </div>
-                            </div>
+                            <div id="sockets" class="w-100 h-100 p-3"></div>
                         </div>
                     </div>
                 </div>
@@ -127,114 +100,192 @@
 
 <script src="static/js/bootstrap.bundle.min.js"></script>
 <script src="static/js/echarts.min.js"></script>
-<script>
-    window.stat = {
-        memoryChart: echarts.init(document.getElementById('memory')),
-        cpuChart: echarts.init(document.getElementById('cpu')),
-        filesystemChart: echarts.init(document.getElementById('filesystem')),
-        socketsChart: echarts.init(document.getElementById('sockets')),
-    };
+<script type="module">
 
-    window.options = {
-        cpu: {
-            title: {
-                text: 'CPU占用情况'
-            },
-            tooltip: {},
-            xAxis: {
-                data: ['2023-08-02 18:30:00', '2023-08-02 18:35:00', '2023-08-02 18:37:00', '2023-08-02 18:39:00', '2023-08-02 18:40:00', '2023-08-02 18:50:00']
-            },
-            yAxis: {},
-            series: [
-                {
-                    name: 'CPU占用',
-                    type: 'line',
-                    data: [10, 20, 20, 36, 10, 10]
-                }
-            ]
+    window.config = {
+        url: "http://127.0.0.1:18081/sys",
+        interval: null,
+        interval_sec: 1000,
+        interval_run: function () {
+            window.fetch(window.config.url)
+                .then(response => {
+                    if (response.status !== 200) {
+                        window.config.interval_close();
+                        return {};
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    window.cb.memory(data.memory || {});
+                    window.cb.cpu(data.cpu_load || {});
+                    window.cb.swap(data.swap || {});
+                    window.cb.sockets(data.sockets || {});
+                })
+                .catch(err => {
+                    window.config.interval_close();
+                    console.error(err);
+                })
         },
-        memory: {
-            title: {
-                text: '内存占用情况'
-            },
-            tooltip: {},
-            legend: {
-                data: ['内存占用情况']
-            },
-            series: [
-                {
-                    name: '内存占用',
-                    type: 'pie',
-                    data: [{
-                        value: 30,
-                        name: '2023-08-02 18:30:00',
-                    }, {
-                        value: 40,
-                        name: '2023-08-02 18:36:00',
-                    }, {
-                        value: 80,
-                        name: '2023-08-02 18:40:00',
-                    }, {
-                        value: 20,
-                        name: '2023-08-02 18:48:00',
-                    }, {
-                        value: 10,
-                        name: '2023-08-02 18:52:00',
-                    }, {
-                        value: 30,
-                        name: '2023-08-02 18:59:00',
-                    }]
-                }
-            ]
-        },
-        filesystem: {
-            title: {
-                text: '硬盘占用情况'
-            },
-            tooltip: {},
-            legend: {
-                data: ['销量']
-            },
-            xAxis: {
-                data: ['衬衫', '羊毛衫', '雪纺衫', '裤子', '高跟鞋', '袜子']
-            },
-            yAxis: {},
-            series: [
-                {
-                    name: '销量',
-                    type: 'bar',
-                    data: [5, 20, 36, 10, 10, 20]
-                }
-            ]
-        },
-        sockets: {
-            title: {
-                text: 'Socket占用'
-            },
-            tooltip: {},
-            legend: {
-                data: ['Socket占用']
-            },
-            xAxis: {
-                data: ['2023-08-02 18:30:00', '2023-08-02 18:35:00', '2023-08-02 18:37:00', '2023-08-02 18:39:00', '2023-08-02 18:40:00', '2023-08-02 18:50:00']
-            },
-            yAxis: {},
-            series: [
-                {
-                    name: 'Socket占用',
-                    type: 'scatter',
-                    data: [10, 20, 20, 36, 10, 10]
-                }
-            ]
+        interval_close: function () {
+            if (window.config.interval !== null) {
+                window.clearInterval(window.config.interval);
+                window.config.interval = null;
+            }
         }
     }
 
-    // 使用刚指定的配置项和数据显示图表。
-    window.stat.cpuChart.setOption(window.options.cpu);
-    window.stat.memoryChart.setOption(window.options.memory);
-    window.stat.filesystemChart.setOption(window.options.filesystem);
-    window.stat.socketsChart.setOption(window.options.sockets);
 
+    window.nodes = {
+        memoryChart: echarts.init(document.getElementById('memory')),
+        cpuChart: echarts.init(document.getElementById('cpu')),
+        swapChart: echarts.init(document.getElementById('swap')),
+        socketsChart: echarts.init(document.getElementById('sockets')),
+    };
+
+    window.cb = {
+        memory: function (mem) {
+            if (Object.keys(mem).length !== 0) {
+                const stat = [{
+                    name: 'used',
+                    value: mem.used || 0,
+                }, {
+                    name: 'free',
+                    value: mem.free || 0,
+                }];
+                window.nodes.memoryChart.setOption({
+                    title: {
+                        text: 'Memory'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: ['Memory Use']
+                    },
+                    series: [
+                        {
+                            name: 'Memory Use',
+                            type: 'pie',
+                            data: stat
+                        }
+                    ]
+                });
+            }
+        },
+        cpu: function (cpu) {
+            if (Object.keys(cpu).length !== 0) {
+                const stat = [{
+                    name: 'user',
+                    value: cpu.user || 0,
+                }, {
+                    name: 'nice',
+                    value: cpu.nice || 0,
+                }, {
+                    name: 'sys',
+                    value: cpu.sys || 0,
+                }, {
+                    name: 'interrupt',
+                    value: cpu.interrupt || 0,
+                }, {
+                    name: 'idle',
+                    value: cpu.idle || 0,
+                }];
+                window.nodes.cpuChart.setOption({
+                    title: {
+                        text: 'CPU'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: ['CPU Use']
+                    },
+                    series: [
+                        {
+                            name: 'CPU Use',
+                            type: 'pie',
+                            data: stat
+                        }
+                    ]
+                });
+            }
+        },
+        swap: function (swap) {
+            if (Object.keys(swap).length !== 0) {
+                const stat = [{
+                    name: 'used',
+                    value: swap.used || 0,
+                }, {
+                    name: 'free',
+                    value: swap.free || 0,
+                }];
+                window.nodes.swapChart.setOption({
+                    title: {
+                        text: 'Swap'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: ['Swap Use']
+                    },
+                    series: [
+                        {
+                            name: 'Swap Use',
+                            type: 'pie',
+                            data: stat
+                        }
+                    ]
+                });
+            }
+        },
+        sockets: function (sockets) {
+            if (Object.keys(sockets).length !== 0) {
+                const stat = [{
+                    name: 'tcp_sockets_in_use',
+                    value: sockets.tcp_sockets_in_use || 0,
+                }, {
+                    name: 'tcp_sockets_orphaned',
+                    value: sockets.tcp_sockets_orphaned || 0,
+                }, {
+                    name: 'udp_sockets_in_use',
+                    value: sockets.udp_sockets_in_use || 0,
+                }, {
+                    name: 'tcp6_sockets_in_use',
+                    value: sockets.tcp6_sockets_in_use || 0,
+                }, {
+                    name: 'udp6_sockets_in_use',
+                    value: sockets.udp6_sockets_in_use || 0,
+                }];
+                window.nodes.socketsChart.setOption({
+                    title: {
+                        text: 'Sockets'
+                    },
+                    tooltip: {},
+                    legend: {
+                        data: ['Sockets Use']
+                    },
+                    series: [
+                        {
+                            name: 'Sockets Use',
+                            type: 'pie',
+                            data: stat
+                        }
+                    ]
+                });
+            }
+        },
+    }
+
+    // initialize
+    window.onload = function () {
+        window.config.interval_run();
+        window.config.interval = window.setInterval(
+            window.config.interval_run,
+            window.config.interval_sec
+        );
+    };
+
+    // resize
+    window.onresize = function () {
+        Object.values(window.nodes).forEach(value => {
+            value.resize();
+        });
+    }
 
 </script>
 </body>

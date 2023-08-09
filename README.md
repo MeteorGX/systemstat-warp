@@ -15,7 +15,7 @@ stable release as well.
 ## Building systemstat-warp
 
 ```shell
-$ git clone https://github.com/meteorcat/systemstat-warp
+$ git clone https://github.com/MeteorGX/systemstat-warp.git
 $ cd systemstat-warp
 $ cargo build
 ```
@@ -53,7 +53,7 @@ systemstat-warp-cli config.toml
 # vim /etc/systemd/system/systemstat-warp.service
 [Unit]
 Description = Systemstat-warp Server Monitor
-Documentation = https://github.com/meteorcat/systemstat-warp
+Documentation = https://github.com/MeteorGX/systemstat-warp
 After = network.target nss-lookup.target
 
 

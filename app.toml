@@ -1,0 +1,7 @@
+[basic]
+log = "debug"
+
+[web]
+address = "127.0.0.1"
+port = 18081
+

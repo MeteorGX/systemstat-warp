@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use systemstat::{Platform, System};
-use crate::{SysInfo, SysReply};
+use crate::{SysInfo};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysSockets {
@@ -25,6 +25,5 @@ impl SysInfo<System, SysSockets> for SysSockets {
 }
 
 
-impl SysReply for SysSockets {}
 
 

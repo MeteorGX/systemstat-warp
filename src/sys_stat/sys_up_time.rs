@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use systemstat::{Platform, System};
-use crate::{SysInfo, SysReply};
+use crate::{SysInfo};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysUpTime {
@@ -23,6 +23,4 @@ impl SysInfo<System, SysUpTime> for SysUpTime {
     }
 }
 
-
-impl SysReply for SysUpTime {}
 

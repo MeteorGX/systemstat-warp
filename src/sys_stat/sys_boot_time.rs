@@ -2,7 +2,6 @@ use serde::{Deserialize, Serialize};
 use systemstat::Platform;
 use systemstat::System;
 use crate::sys_stat::SysInfo;
-use crate::SysReply;
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysBootTime {
@@ -34,6 +33,6 @@ impl SysInfo<System, SysBootTime> for SysBootTime {
 }
 
 
-impl SysReply for SysBootTime {}
+
 
 

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use systemstat::Platform;
 use systemstat::System;
-use crate::{SysInfo, SysReply};
+use crate::{SysInfo};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysLoadAggregate {
@@ -23,4 +23,3 @@ impl SysInfo<System, SysLoadAggregate> for SysLoadAggregate {
 }
 
 
-impl SysReply for SysLoadAggregate {}

@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use systemstat::{Platform, saturating_sub_bytes};
 use systemstat::System;
-use crate::{SysInfo, SysReply};
+use crate::{SysInfo};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysMount {
@@ -58,5 +58,4 @@ impl SysInfo<System, SysMounts> for SysMounts {
     }
 }
 
-impl SysReply for SysMounts {}
 

@@ -1,9 +1,28 @@
 [basic]
 log = "debug"
-log_file = ""
 
 [web]
 address = "127.0.0.1"
 port = 18081
-cors_origin = "*"
-static_dir = "./template/"
+static_dir = "./html/"
+cipher = "sha256" # cipher method
+
+# username:password[cipher],username:password,......
+auth = "meteorcat:fe67eaa1f8b3b85a3a135795128abf9f4594f95128bef04c276f7dbcf1198b78"
+
+[tcp]
+#todo: tcp transmission
+
+[udp]
+#todo: udp transmission
+
+[websocket]
+# todo: websocket transmission
+
+[db]
+# todo: save database
+
+[redis]
+# todo: save redis
+
+

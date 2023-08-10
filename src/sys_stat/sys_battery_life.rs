@@ -2,7 +2,7 @@ use std::time::Duration;
 use serde::{Deserialize, Serialize};
 use systemstat::Platform;
 use systemstat::System;
-use crate::{SysInfo, SysReply};
+use crate::{SysInfo};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysBatteryLife {
@@ -21,4 +21,3 @@ impl SysInfo<System, SysBatteryLife> for SysBatteryLife {
     }
 }
 
-impl SysReply for SysBatteryLife {}

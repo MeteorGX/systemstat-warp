@@ -2,21 +2,21 @@ use std::collections::BTreeMap;
 use serde::{Deserialize, Serialize};
 use systemstat::{IpAddr, Platform};
 use systemstat::System;
-use crate::{SysInfo, SysNetworkAddressEnum, SysReply};
+use crate::{SysInfo, SysNetworkAddressEnum};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SysNetworkAddress {
     pub addr: SysNetworkAddressEnum,
     pub netmask: SysNetworkAddressEnum,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SysNetworks {
     pub name: String,
     pub addrs: Vec<SysNetworkAddress>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct SysNetworkMap {
     pub networks: BTreeMap<String, SysNetworks>,
 }
@@ -57,4 +57,3 @@ impl SysInfo<System, SysNetworkMap> for SysNetworkMap {
 }
 
 
-impl SysReply for SysNetworkMap {}

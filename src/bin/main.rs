@@ -1,8 +1,6 @@
-use std::net::SocketAddr;
 use log::info;
-use simple_logger::SimpleLogger;
 use tokio::io::AsyncReadExt;
-use systemstat_warp::{AppConfig, WebRouteTable};
+use systemstat_warp::{AppConfig, LoggerHandler, WebHandler};
 
 
 #[tokio::main]
@@ -25,49 +23,18 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     config_fd.read_to_string(&mut config_context).await?;
 
 
-    // convert struct
+    // logger handler
     let config = AppConfig::parse(config_context.as_str())?;
-    let logger = match config.basic {
-        Some(active) => (
-            active.log.unwrap_or("error".to_owned()),
-            active.timezone.unwrap_or("local".to_owned()),
-            active.log_file
-        ),
-        None => (
-            "error".to_owned(),
-            "local".to_owned(),
-            None
-        ),
-    };
-
-    // initialize logger
-    match logger.1.as_str() {
-        "local" => SimpleLogger::new().with_local_timestamps(),
-        "utc" => SimpleLogger::new().with_utc_timestamps(),
-        _ => SimpleLogger::new()
-    }.with_level(match logger.0.as_str() {
-        "debug" => log::LevelFilter::Debug,
-        "info" => log::LevelFilter::Info,
-        "trace" => log::LevelFilter::Trace,
-        "off" => log::LevelFilter::Warn,
-        "warn" => log::LevelFilter::Off,
-        _ => log::LevelFilter::Error,
-    }).init()?;
+    if let Some(basic) = config.basic {
+        info!("[Basic] = {:?}",basic);
+        LoggerHandler::init(&basic)?;
+    }
 
 
     // network
     if let Some(web) = config.web {
         info!("[Web] = {:?}",web);
-
-        // server monitor
-        let address = format!("{}:{}", web.address, web.port);
-        let socket = address.parse::<SocketAddr>()?;
-        let web_clone = web.clone();
-        tokio::spawn(async move {
-            WebRouteTable::create(web_clone)
-                .build(socket)
-                .await;
-        }).await?;
+        WebHandler::init(&web).await?;
     }
 
 

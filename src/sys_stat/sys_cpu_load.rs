@@ -2,7 +2,7 @@ use std::time::Duration;
 use serde::{Deserialize, Serialize};
 use systemstat::Platform;
 use systemstat::System;
-use crate::{SysInfo, SysReply};
+use crate::{SysInfo};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysCpuLoad {
@@ -61,6 +61,5 @@ impl SysInfo<System, SysCpuLoad> for SysCpuLoad {
 }
 
 
-impl SysReply for SysCpuLoad {}
 
 

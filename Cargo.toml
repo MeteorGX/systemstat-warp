@@ -19,10 +19,15 @@ path = "src/bin/main.rs"
 log = { version = "0.4.19" }
 simple_logger = { version = "4.2.0" }
 chrono = { version = "0.4.26" }
-serde = { version = "1.0.179", features = ["derive"] }
+serde = { version = "1.0.171", features = ["derive"] }
 toml = { version = "0.7.6" }
-serde_json = { version = "1.0.104" }
+serde_json = { version = "1.0.102" }
 tokio = { version = "1.29.1", features = ["full"] }
-warp = { version = "0.3.5" }
+axum = { version = "0.6.18", features = ["headers"] }
+axum-extra = { version = "0.7.4" }
+tower = { version = "0.4.13", features = ["util"] }
+tower-http = { version = "0.4.1", features = ["fs", "trace"] }
 systemstat = { version = "0.2.3" }
 lazy_static = { version = "1.4.0" }
+sha2 = { version = "0.10.7" }
+uuid = { version = "1.4.1", features = ["v4", "fast-rng", "macro-diagnostics"] }

@@ -11,10 +11,8 @@ mod sys_up_time;
 
 
 use std::net::{Ipv4Addr, Ipv6Addr};
-use log::{debug, error};
 use serde::{Deserialize, Serialize};
 use systemstat::System;
-use warp::http;
 pub use sys_boot_time::*;
 pub use sys_load_aggregate::*;
 pub use sys_memory::*;
@@ -31,31 +29,12 @@ pub trait SysInfo<H, T> {
     fn sys(handler: &H) -> std::io::Result<T>;
 }
 
-/// warp::reply::WithStatus<String>
-pub type JsonReply = warp::reply::WithStatus<String>;
-
-/// Result<JsonReply, warp::Rejection>
-pub type JsonReplyResult = Result<JsonReply, warp::Rejection>;
 
 
-/// JsonReply translates into Json trait
-pub trait SysReply {
-    fn reject(&self) -> JsonReply where Self: Serialize {
-        match serde_json::to_string(&self) {
-            Ok(e) => {
-                debug!("{:?}",e);
-                warp::reply::with_status(e, http::StatusCode::OK)
-            }
-            Err(e) => {
-                error!("{:?}",e);
-                warp::reply::with_status(e.to_string(), http::StatusCode::INTERNAL_SERVER_ERROR)
-            }
-        }
-    }
-}
 
 
-#[derive(Serialize, Deserialize)]
+
+#[derive(Serialize, Deserialize, Debug)]
 pub enum SysNetworkAddressEnum {
     Empty,
     Unsupported,
@@ -76,6 +55,23 @@ pub struct SystemInfo {
     pub sockets: Option<SysSockets>,
     pub swap: Option<SysSwap>,
     pub up_time: Option<SysUpTime>,
+}
+
+impl Default for SystemInfo{
+    fn default() -> Self {
+        Self{
+            battery_life: None,
+            boot_time: None,
+            cpu_load: None,
+            load_aggregate: None,
+            memory: None,
+            mounts: None,
+            networks: None,
+            sockets: None,
+            swap: None,
+            up_time: None,
+        }
+    }
 }
 
 impl SysInfo<System, SystemInfo> for SystemInfo {
@@ -125,5 +121,3 @@ impl SysInfo<System, SystemInfo> for SystemInfo {
     }
 }
 
-
-impl SysReply for SystemInfo {}

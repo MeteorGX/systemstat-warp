@@ -98,33 +98,114 @@
 </main>
 
 
+<!-- Modal -->
+<div class="modal fade" id="loginBox" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="loginBoxLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="loginBoxLabel">Authorized</h1>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm" autocomplete="off">
+                    <div class="mb-3">
+                        <label for="formUsername" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="formUsername">
+                    </div>
+                    <div class="mb-3">
+                        <label for="formPassword" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="formPassword">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="formSubmit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="static/js/bootstrap.bundle.min.js"></script>
 <script src="static/js/echarts.min.js"></script>
 <script type="module">
 
     window.config = {
-        url: "http://127.0.0.1:18081/sys",
+        url: "/sys",
+        authorized: '',
+        authorized_url: '/auth',
+        authorized_box: new bootstrap.Modal('#loginBox', {}),
+        authorized_event: function () {
+            document.getElementById('formSubmit').addEventListener('click', (e) => {
+                e.preventDefault();
+                const username = document.getElementById('formUsername').value || "";
+                const password = document.getElementById('formPassword').value || "";
+                window.fetch(window.config.authorized_url, {
+                    method: "POST",
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username: username, password: password})
+                }).then(response => {
+                    if (response.status === 404) {
+                        window.alert(`not found user: ${username}`);
+                        return {};
+                    }
+                    if (response.status === 406) {
+                        window.alert(`failed by password: ${username}`);
+                        return {};
+                    }
+
+                    if (response.status === 200) {
+                        return response.json();
+                    } else {
+                        window.alert("server error");
+                        return {};
+                    }
+                }).then((data) => {
+                    const authorized = data.authorized || '';
+                    if (authorized.length > 0) {
+                        window.config.authorized = authorized;
+                        window.config.authorized_box.hide();
+                        window.dispatchEvent(new Event('load'));
+                    }
+                }).catch(e => {
+                    console.log(e);
+                    window.alert(e);
+                });
+            });
+        },
+
         interval: null,
         interval_sec: 1000,
         interval_run: function () {
-            window.fetch(window.config.url)
-                .then(response => {
-                    if (response.status !== 200) {
-                        window.config.interval_close();
-                        return {};
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    window.cb.memory(data.memory || {});
-                    window.cb.cpu(data.cpu_load || {});
-                    window.cb.swap(data.swap || {});
-                    window.cb.sockets(data.sockets || {});
-                })
-                .catch(err => {
+            window.fetch(window.config.url, {
+                method: "POST",
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({authorized: window.config.authorized})
+            }).then(response => {
+                // authorized
+                if (response.status === 401) {
                     window.config.interval_close();
-                    console.error(err);
-                })
+                    window.config.authorized_event();
+                    window.config.authorized_box.show();
+                    return {};
+                }
+
+                // error
+                if (response.status !== 200) {
+                    window.config.interval_close();
+                    return {};
+                }
+
+
+                return response.json();
+            }).then(data => {
+                window.cb.memory(data.memory || {});
+                window.cb.cpu(data.cpu_load || {});
+                window.cb.swap(data.swap || {});
+                window.cb.sockets(data.sockets || {});
+            }).catch(err => {
+                window.config.interval_close();
+                console.error(err);
+            })
         },
         interval_close: function () {
             if (window.config.interval !== null) {

@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 use systemstat::{Platform, saturating_sub_bytes, System};
-use crate::{SysInfo, SysReply};
+use crate::{SysInfo};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysSwap {
@@ -28,5 +28,3 @@ impl SysInfo<System, SysSwap> for SysSwap {
     }
 }
 
-
-impl SysReply for SysSwap {}

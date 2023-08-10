@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use systemstat::{Platform, saturating_sub_bytes};
 use systemstat::System;
-use crate::{SysInfo, SysReply};
+use crate::{SysInfo};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct SysMemory {
@@ -30,4 +30,3 @@ impl SysInfo<System, SysMemory> for SysMemory {
 }
 
 
-impl SysReply for SysMemory {}

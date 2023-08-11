@@ -135,7 +135,7 @@
         authorized_url: '/auth',
         authorized_box: new bootstrap.Modal('#loginBox', {}),
         authorized_event: function () {
-            document.getElementById('formSubmit').addEventListener('click', (e) => {
+            document.getElementById('formSubmit').onclick = (e) => {
                 e.preventDefault();
                 const username = document.getElementById('formUsername').value || "";
                 const password = document.getElementById('formPassword').value || "";
@@ -170,7 +170,7 @@
                     console.log(e);
                     window.alert(e);
                 });
-            });
+            };
         },
 
         interval: null,

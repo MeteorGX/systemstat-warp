@@ -17,12 +17,12 @@ stable release as well.
 ```shell
 $ git clone https://github.com/MeteorGX/systemstat-warp.git
 $ cd systemstat-warp
-$ cargo build
+$ cargo build --release
 ```
 
 ## Example
 
-- Url: [monitor.meteorcat.com](https://monitor.meteorcat.com)
+- Url: [monitor.meteorcat.net](https://monitor.meteorcat.net)
 - Username: `meteorcat`
 - Password: `meteorcat`
 
@@ -41,12 +41,6 @@ port = 18081 # listen port
 static_dir = "./html/" # static directory
 cipher = "sha256" # cipher method
 auth = "meteorcat:fe67eaa1f8b3b85a3a135795128abf9f4594f95128bef04c276f7dbcf1198b78" # auth[username:password(SHA256)]
-```
-
-## Run systemstat-warp
-
-```shell
-systemstat-warp-cli config.toml
 ```
 
 ## Run by Systemd
@@ -71,6 +65,23 @@ LimitNOFILE = 65535
 
 [Install]
 WantedBy = multi-user.target
+```
+
+## Forward Nginx
+
+```nginx
+# monitor.conf
+server {
+    listen 80;
+    server_name monitor.meteorcat.net;
+    location / {
+      proxy_pass http://127.0.0.1:18081;
+      proxy_redirect off;
+      proxy_set_header Host $host;
+      proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+      proxy_set_header X-real-ip $remote_addr;
+    }
+}
 ```
 
 # License

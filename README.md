@@ -1,6 +1,6 @@
 # systemstat-warp
 
-By using the Rust crates systemstat and warp, I wrapped a Web API to monitor server performance.
+By using the Rust crates systemstat and tokio, I wrapped a Web API to monitor server performance.
 
 ```toml
 [dependencies]
@@ -20,25 +20,27 @@ $ cd systemstat-warp
 $ cargo build
 ```
 
+## Example
+
+- Url: [monitor.meteorcat.com](https://monitor.meteorcat.com)
+- Username: `meteorcat`
+- Password: `meteorcat`
+
 ## Configuration
 
 ```toml
-# examples in project directory 
-
 # normal config
 [default]
 log = "debug" # logger level
-log_file = "/var/log/systemstat-warp.log"
 
 
 # web config
 [web]
 address = "127.0.0.1" # listen server
 port = 18081 # listen port
-auth = "xxx:yyy,zzz:aaa" # auth[username:password(SHA256)] header -> sys-cipher: xxx  
-allow = "*" # allow access liste[default:*]
-deny = "127.0.0.1,192.168.1.10,192.168.1.11" # deny access list
-
+static_dir = "./html/" # static directory
+cipher = "sha256" # cipher method
+auth = "meteorcat:fe67eaa1f8b3b85a3a135795128abf9f4594f95128bef04c276f7dbcf1198b78" # auth[username:password(SHA256)]
 ```
 
 ## Run systemstat-warp
@@ -61,7 +63,7 @@ After = network.target nss-lookup.target
 # 1. create systemstat user
 # 2. cp systemstat-warp-cli /usr/bin
 # 3. touch /etc/systemstat-warp.toml
-User = systemstat
+User = nobody
 ExecStart = /usr/bin/systemstat-warp-cli /etc/systemstat-warp.toml
 Restart = on-failure
 RestartPreventExitStatus = 23

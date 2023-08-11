@@ -30,10 +30,33 @@ pub struct AppConfigByWeb {
 }
 
 
+/// database configuration
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AppConfigByDB {
+    pub url: String,
+}
+
+
+/// redis configuration
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct AppConfigByRedis {
+    pub url: String,
+    pub interval: Option<u64>,
+    pub timezone: Option<String>,
+    pub prefix: Option<String>,
+    pub max_attempts: Option<u32>,
+    pub min_delay: Option<u32>,
+    pub max_delay: Option<u32>,
+    pub mult: Option<u32>,
+}
+
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AppConfig {
     pub basic: Option<AppConfigByBasic>,
     pub web: Option<AppConfigByWeb>,
+    pub db: Option<AppConfigByDB>,
+    pub redis: Option<AppConfigByRedis>,
 }
 
 

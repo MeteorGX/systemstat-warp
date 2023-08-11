@@ -175,11 +175,9 @@ impl WebHandler {
         };
 
         // server
-        let _ = tokio::spawn(async move {
-            Server::bind(&socket)
-                .serve(router.into_make_service())
-                .await
-        }).await;
+        Server::try_bind(&socket)?
+            .serve(router.into_make_service())
+            .await?;
         Ok(())
     }
 }

@@ -1,6 +1,7 @@
-use log::info;
+use log::{error, info};
 use tokio::io::AsyncReadExt;
-use systemstat_warp::{AppConfig, LoggerHandler, WebHandler};
+use tokio::spawn;
+use systemstat_warp::{AppConfig, DBHandler, LoggerHandler, RedisHandler, WebHandler};
 
 
 #[tokio::main]
@@ -26,17 +27,60 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // logger handler
     let config = AppConfig::parse(config_context.as_str())?;
     if let Some(basic) = config.basic {
-        info!("[Basic] = {:?}",basic);
         LoggerHandler::init(&basic)?;
+        info!("[Basic] = {:?}",basic);
     }
+
+    // initialize tasks
+    let mut tasks = vec![];
 
 
     // network
     if let Some(web) = config.web {
         info!("[Web] = {:?}",web);
-        WebHandler::init(&web).await?;
+        tasks.push(spawn(async move {
+            match WebHandler::init(&web).await {
+                Ok(_) => (),
+                Err(e) => {
+                    error!("{:?}",e)
+                }
+            };
+        }));
     }
 
+
+    // database
+    if let Some(db) = config.db {
+        info!("[DB] = {:?}",db);
+        tasks.push(spawn(async move {
+            match DBHandler::init(&db).await {
+                Ok(_) => (),
+                Err(e) => {
+                    error!("{:?}",e)
+                }
+            };
+        }));
+    }
+
+
+    // redis
+    if let Some(redis) = config.redis {
+        info!("[REDIS] = {:?}",redis);
+        tasks.push(spawn(async move {
+            match RedisHandler::init(&redis).await {
+                Ok(_) => (),
+                Err(e) => {
+                    error!("{:?}",e)
+                }
+            };
+        }));
+    }
+
+
+    // execute tasks
+    for task in tasks {
+        task.await.unwrap();
+    }
 
     Ok(())
 }

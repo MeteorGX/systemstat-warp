@@ -31,3 +31,4 @@ systemstat = { version = "0.2.3" }
 lazy_static = { version = "1.4.0" }
 sha2 = { version = "0.10.7" }
 uuid = { version = "1.4.1", features = ["v4", "fast-rng", "macro-diagnostics"] }
+fred = { version = "6.3.0" }

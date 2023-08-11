@@ -50,11 +50,11 @@ pub struct SystemInfo {
     pub cpu_load: Option<SysCpuLoad>,
     pub load_aggregate: Option<SysLoadAggregate>,
     pub memory: Option<SysMemory>,
-    pub mounts: Option<SysMounts>,
-    pub networks: Option<SysNetworkMap>,
-    pub sockets: Option<SysSockets>,
     pub swap: Option<SysSwap>,
     pub up_time: Option<SysUpTime>,
+    pub sockets: Option<SysSockets>,
+    //pub mounts: Option<SysMounts>,
+    // pub networks: Option<SysNetworkMap>,
 }
 
 impl Default for SystemInfo{
@@ -65,11 +65,11 @@ impl Default for SystemInfo{
             cpu_load: None,
             load_aggregate: None,
             memory: None,
-            mounts: None,
-            networks: None,
-            sockets: None,
             swap: None,
             up_time: None,
+            sockets: None,
+            // mounts: None,
+            // networks: None,
         }
     }
 }
@@ -97,18 +97,6 @@ impl SysInfo<System, SystemInfo> for SystemInfo {
                 Ok(stat) => Some(stat),
                 Err(_e) => None,
             },
-            mounts: match SysMounts::sys(handler) {
-                Ok(stat) => Some(stat),
-                Err(_e) => None,
-            },
-            networks: match SysNetworkMap::sys(handler) {
-                Ok(stat) => Some(stat),
-                Err(_e) => None,
-            },
-            sockets: match SysSockets::sys(handler) {
-                Ok(stat) => Some(stat),
-                Err(_e) => None,
-            },
             swap: match SysSwap::sys(handler) {
                 Ok(stat) => Some(stat),
                 Err(_e) => None,
@@ -117,6 +105,19 @@ impl SysInfo<System, SystemInfo> for SystemInfo {
                 Ok(stat) => Some(stat),
                 Err(_e) => None,
             },
+            sockets: match SysSockets::sys(handler) {
+                Ok(stat) => Some(stat),
+                Err(_e) => None,
+            },
+            // mounts: match SysMounts::sys(handler) {
+            //     Ok(stat) => Some(stat),
+            //     Err(_e) => None,
+            // },
+            // networks: match SysNetworkMap::sys(handler) {
+            //     Ok(stat) => Some(stat),
+            //     Err(_e) => None,
+            // },
+
         })
     }
 }
